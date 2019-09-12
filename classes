@@ -1,0 +1,11 @@
+class Client:
+
+    #constructeur
+    def __init__(self):
+      #liste des champs
+      self.num=0
+      self.restaurant=[]
+      self.plats=[]
+    #fin constructeur
+  # fin de la classe pour l'instant
+  

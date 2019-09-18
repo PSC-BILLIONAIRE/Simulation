@@ -54,18 +54,22 @@ class Plat:
 
 Dan= Client()
 Lionel= Client()
-
+Ismael = Client()
 pizza= Plat()
 pizza.nom='pizza'
 sushi=Plat()
 sushi.nom='sushi'
 tacos=Plat()
 tacos.nom='tacos'
+panini = Plat()
+panini.nom = "panini"
+
 
 Dan.commander(sushi, 2)
 Lionel.commander(pizza, 3)
 Dan.commander(tacos, 3)
 Lionel.commander(tacos,1)
+Ismael.commander(tacos , 10)
 
 for key in Dan.plats :
     print( "Dan a mangé " + str(Dan.plats[key]) +" "+ key.nom )

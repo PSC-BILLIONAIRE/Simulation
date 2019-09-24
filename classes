@@ -1,22 +1,42 @@
 class Client:
 
     # constructeur
+
     def __init__(self):
+
         # liste des champs
+
         self.num = 0
+
         self.restaurant = []
-        self.plats = {} #dictionnaire (plat, nb de fois où il a mangé ce plat)
+
+        self.plats = {}  # dictionnaire (plat, nb de fois où il a mangé ce plat)
+
+        self.notes = {}  # dictionnaire (plat, note de ce palt)
+
     # fin constructeur
 
-
     def commander(self, plat, nb):
-        #methode qui actualise le dictionnaire plats du client à chacune de ses commandes
-        if self.plats.get(plat)!=None :
-            #si le client a deja commander ce plat, alors il est deja present dans le dictionnaire donc on ne fait qu'augmenter le nombre de commandes pour ce plat
-            self.plats[plat]+=nb
-        else :
-            #c'est la premiere fois que le client commande ce plat donc on crée la clé dans le dictionaire et on initialise sa valeur
-            self.plats[plat]=nb
+
+        # methode qui actualise le dictionnaire plats du client à chacune de ses commandes
+
+        if self.plats.get(plat) != None:
+
+            # si le client a deja commander ce plat, alors il est deja present dans le dictionnaire donc on ne fait qu'augmenter le nombre de commandes pour ce plat
+
+            self.plats[plat] += nb
+
+        else:
+
+            # c'est la premiere fois que le client commande ce plat donc on crée la clé dans le dictionaire et on initialise sa valeur
+
+            self.plats[plat] = nb
+
+    def setNote(self, plat, note):
+
+        # methode qui attribue la note 'note' au plat 'plat'
+
+        self.notes[plat] = note
 
 
 # fin de la classe pour l'instant
@@ -25,10 +45,14 @@ class Client:
 class Restaurant:
 
     # constructeur
+
     def __init__(self):
         # liste des champs
+
         self.menu = []
+
         self.clients = []
+
     # fin constructeur
 
 
@@ -38,53 +62,150 @@ class Restaurant:
 class Plat:
 
     def __init__(self):
-    # listes des champs
-        self.nom=''
+        # listes des champs
+
+        self.nom = ''
+
         self.ingredients = []
+
         self.restaurants = []
+
+
 # fin constructeur
+
 # fin de la classe pour l'instant
 
 
-
-
 ##########################################################################
+
 #############                     MAIN                   #################
+
 ##########################################################################
+
 
 ## creation des utilisateurs
 
-Dan= Client()
-Lionel= Client()
-Nicolas= Client()
-Ismael= Client()
-Luc= Client()
-Albert=Client()
-Noe= Client()
-Didi=Client()
+
+Dan = Client()
+
+Lionel = Client()
+
+Nicolas = Client()
+
+Ismael = Client()
+
+Luc = Client()
+
+Albert = Client()
+
+Noe = Client()
+
+Didi = Client()
 
 ##Creation des plats
 
-pizza= Plat()
-pizza.nom='pizza'
-sushi=Plat()
-sushi.nom='sushi'
-tacos=Plat()
-tacos.nom='tacos'
-brochette=Plat()
-brochette.nom='brochette'
-salade_cesar= Plat()
-salade_cesar.nom='salade_cesar'
-salade_verte=Plat()
-salade_verte.nom='salade_verte'
-burger=Plat()
-burger.nom='burger'
-frite=Plat()
-frite.nom='frite'
+
+pizza = Plat()
+
+pizza.nom = 'pizza'
+
+sushi = Plat()
+
+sushi.nom = 'sushi'
+
+tacos = Plat()
+
+tacos.nom = 'tacos'
+
+brochette = Plat()
+
+brochette.nom = 'brochette'
+
+salade_cesar = Plat()
+
+salade_cesar.nom = 'salade_cesar'
+
+salade_verte = Plat()
+
+salade_verte.nom = 'salade_verte'
+
+burger = Plat()
+
+burger.nom = 'burger'
+
+frite = Plat()
+
+frite.nom = 'frite'
+
+Dan.setNote(brochette, 1)
+Lionel.setNote(brochette, 4)
+Nicolas.setNote(brochette, 5)
+Ismael.setNote(brochette, 2)
+Luc.setNote(brochette, 4)
+Noe.setNote(brochette, 4)
+Albert.setNote(brochette, 1)
+Didi.setNote(brochette, 3)
 
 
-Dan.commander(sushi, 2)
-Lionel.commander(pizza, 3)
-Dan.commander(tacos, 3)
-Lionel.commander(tacos,1)
+Dan.setNote(sushi, 2)
+Lionel.setNote(sushi, 5)
+Nicolas.setNote(sushi, 5)
+Ismael.setNote(sushi, 1)
+Luc.setNote(sushi, 4)
+Noe.setNote(sushi, 4)
+Albert.setNote(sushi, 1)
+Didi.setNote(sushi, 3)
 
+Dan.setNote(pizza, 5)
+Lionel.setNote(pizza, 2)
+Nicolas.setNote(pizza, 1)
+Ismael.setNote(pizza, 1)
+Luc.setNote(pizza, 4)
+Noe.setNote(pizza, 4)
+Albert.setNote(pizza, 1)
+Didi.setNote(pizza, 3)
+
+Dan.setNote(tacos, 5)
+Lionel.setNote(tacos, 2)
+Nicolas.setNote(tacos, 2)
+Ismael.setNote(tacos, 1)
+Luc.setNote(tacos, 5)
+Noe.setNote(tacos, 4)
+Albert.setNote(tacos, 1)
+Didi.setNote(tacos, 3)
+
+Dan.setNote(salade_cesar, 1)
+Lionel.setNote(salade_cesar, 3)
+Nicolas.setNote(salade_cesar, 1)
+Ismael.setNote(salade_cesar, 1)
+Luc.setNote(salade_cesar, 2)
+Noe.setNote(salade_cesar, 4)
+Albert.setNote(salade_cesar, 5)
+Didi.setNote(salade_cesar, 4)
+
+Dan.setNote(salade_verte, 1)
+Lionel.setNote(salade_verte, 2)
+Nicolas.setNote(salade_verte, 1)
+Ismael.setNote(salade_verte, 1)
+Luc.setNote(salade_verte, 1)
+Noe.setNote(salade_verte, 4)
+Albert.setNote(salade_verte, 5)
+Didi.setNote(salade_verte, 4)
+
+Dan.setNote(burger, 3)
+Lionel.setNote(burger, 4)
+Nicolas.setNote(burger, 4)
+Ismael.setNote(burger, 1)
+Luc.setNote(burger, 4)
+Noe.setNote(burger, 5)
+Albert.setNote(burger, 1)
+Didi.setNote(burger, 2)
+
+print(Lionel.notes[burger])
+#Dan.commander(sushi, 2)
+
+#Lionel.commander(pizza, 3)
+
+#Dan.commander(tacos, 3)
+
+#Lionel.commander(tacos, 1)

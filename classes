@@ -52,16 +52,16 @@ class Plat:
     def __init__(self, nom, num):
         # listes des champs
         self.nom = nom
+        self.num = num
         self.ingredients = []
         self.restaurants = []
-        self.num=num
         TAB_PLATS[self.num]=self
 
 
 # fin constructeur
 # fin de la classe pour l'instant
 
-MATRICE_NOTE = [[0 for k in range(10)] for k in range(10)]
+MATRICE_NOTE = [[0 for k in range(8)] for k in range(8)]
 
 
 def remplissage(client):
@@ -72,7 +72,21 @@ def remplissage(client):
     print('les notes du client numéro : ' + str(client.num) + ' on bien été enregistrées')
     return
 
+## remplissage aléatoire
+import random as rd
 
+def remplissageAleatoire():
+    for client in TAB_CLIENTS:
+        if client==-1:
+            break
+        for plat in TAB_PLATS:
+            if plat==-1:
+                break
+            note=rd.randint(-1,5)
+            # note egale à -1 signifie plat non consommé
+            client.setNote(plat,note)
+        remplissage(client)
+    return
 
 
 ##########################################################################
@@ -95,80 +109,11 @@ Didi = Client('Didi', 7)
 
 pizza = Plat('pizza',2)
 sushi = Plat('sushi',1)
-tacos = Plat('tacos',4)
+tacos = Plat('tacos',3)
 brochette = Plat('brochette',0)
 salade_cesar = Plat('salade_cesar',4)
 salade_verte = Plat('salade_verte',5)
 burger = Plat('burger',6)
 frite = Plat('frite',7)
 
-
-
-Dan.setNote(brochette, 1)
-Lionel.setNote(brochette, 4)
-Nicolas.setNote(brochette, 5)
-Ismael.setNote(brochette, 2)
-Luc.setNote(brochette, 4)
-Noe.setNote(brochette, 4)
-Albert.setNote(brochette, 1)
-Didi.setNote(brochette, 3)
-
-Dan.setNote(sushi, 2)
-Lionel.setNote(sushi, 5)
-Nicolas.setNote(sushi, 5)
-Ismael.setNote(sushi, 1)
-Luc.setNote(sushi, 4)
-Noe.setNote(sushi, 4)
-Albert.setNote(sushi, 1)
-Didi.setNote(sushi, 3)
-
-Dan.setNote(pizza, 5)
-Lionel.setNote(pizza, 2)
-Nicolas.setNote(pizza, 1)
-Ismael.setNote(pizza, 1)
-Luc.setNote(pizza, 4)
-Noe.setNote(pizza, 4)
-Albert.setNote(pizza, 1)
-Didi.setNote(pizza, 3)
-
-Dan.setNote(tacos, 5)
-Lionel.setNote(tacos, 2)
-Nicolas.setNote(tacos, 2)
-Ismael.setNote(tacos, 1)
-Luc.setNote(tacos, 5)
-Noe.setNote(tacos, 4)
-Albert.setNote(tacos, 1)
-Didi.setNote(tacos, 3)
-
-Dan.setNote(salade_cesar, 1)
-Lionel.setNote(salade_cesar, 3)
-Nicolas.setNote(salade_cesar, 1)
-Ismael.setNote(salade_cesar, 1)
-Luc.setNote(salade_cesar, 2)
-Noe.setNote(salade_cesar, 4)
-Albert.setNote(salade_cesar, 5)
-Didi.setNote(salade_cesar, 4)
-
-Dan.setNote(salade_verte, 1)
-Lionel.setNote(salade_verte, 2)
-Nicolas.setNote(salade_verte, 1)
-Ismael.setNote(salade_verte, 1)
-Luc.setNote(salade_verte, 1)
-Noe.setNote(salade_verte, 4)
-Albert.setNote(salade_verte, 5)
-Didi.setNote(salade_verte, 4)
-
-Dan.setNote(burger, 3)
-Lionel.setNote(burger, 4)
-Nicolas.setNote(burger, 4)
-Ismael.setNote(burger, 1)
-Luc.setNote(burger, 4)
-Noe.setNote(burger, 5)
-Albert.setNote(burger, 1)
-Didi.setNote(burger, 2)
-
-for cl in TAB_CLIENTS:
-    remplissage(cl)
-
-
-
+remplissageAleatoire()

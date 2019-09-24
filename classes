@@ -6,11 +6,12 @@ class Client:
         self.num = 0
         self.restaurant = []
         self.plats = {} #dictionnaire (plat, nb de fois où il a mangé ce plat)
+        self.notes={} # dictionnaire (plat, note de ce palt)
     # fin constructeur
 
 
     def commander(self, plat, nb):
-        #methode qui actualise le dictionnaire plats du client à chacune de ses commandes
+        # methode qui actualise le dictionnaire plats du client à chacune de ses commandes
         if self.plats.get(plat)!=None :
             #si le client a deja commander ce plat, alors il est deja present dans le dictionnaire donc on ne fait qu'augmenter le nombre de commandes pour ce plat
             self.plats[plat]+=nb
@@ -18,7 +19,11 @@ class Client:
             #c'est la premiere fois que le client commande ce plat donc on crée la clé dans le dictionaire et on initialise sa valeur
             self.plats[plat]=nb
 
-
+    def setNote(self, plat, note):
+        # methode qui attribue la note 'note' au plat 'plat'
+       self.notes[plat]=note
+        
+        
 # fin de la classe pour l'instant
 
 
@@ -81,6 +86,7 @@ burger=Plat()
 burger.nom='burger'
 frite=Plat()
 frite.nom='frite'
+
 
 
 Dan.commander(sushi, 2)

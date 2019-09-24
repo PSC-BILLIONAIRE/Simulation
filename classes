@@ -52,27 +52,39 @@ class Plat:
 #############                     MAIN                   #################
 ##########################################################################
 
+## creation des utilisateurs
+
 Dan= Client()
 Lionel= Client()
-Ismael = Client()
+Nicolas= Client()
+Ismael= Client()
+Luc= Client()
+Albert=Client()
+Noe= Client()
+Didi=Client()
+
+##Creation des plats
+
 pizza= Plat()
 pizza.nom='pizza'
 sushi=Plat()
 sushi.nom='sushi'
 tacos=Plat()
 tacos.nom='tacos'
-panini = Plat()
-panini.nom = "panini"
+brochette=Plat()
+brochette.nom='brochette'
+salade_cesar= Plat()
+salade_cesar.nom='salade_cesar'
+salade_verte=Plat()
+salade_verte.nom='salade_verte'
+burger=Plat()
+burger.nom='burger'
+frite=Plat()
+frite.nom='frite'
 
 
 Dan.commander(sushi, 2)
 Lionel.commander(pizza, 3)
 Dan.commander(tacos, 3)
 Lionel.commander(tacos,1)
-Ismael.commander(tacos , 10)
 
-for key in Dan.plats :
-    print( "Dan a mangé " + str(Dan.plats[key]) +" "+ key.nom )
-
-for key in Lionel.plats : 
-    print( "Lionel a mangé " + str(Lionel.plats[key]) +" "+ key.nom )

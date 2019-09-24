@@ -3,27 +3,27 @@ class Client:
     # constructeur
     def __init__(self):
         # liste des champs
-        self.num = 0
+        self.num = -1
         self.restaurant = []
-        self.plats = {} #dictionnaire (plat, nb de fois où il a mangé ce plat)
-        self.notes={} # dictionnaire (plat, note de ce palt)
-    # fin constructeur
+        self.plats = {}  # dictionnaire (plat, nb de fois où il a mangé ce plat)
+        self.notes = {}  # dictionnaire (plat, note de ce palt)
 
+    # fin constructeur
 
     def commander(self, plat, nb):
         # methode qui actualise le dictionnaire plats du client à chacune de ses commandes
-        if self.plats.get(plat)!=None :
-            #si le client a deja commander ce plat, alors il est deja present dans le dictionnaire donc on ne fait qu'augmenter le nombre de commandes pour ce plat
-            self.plats[plat]+=nb
-        else :
-            #c'est la premiere fois que le client commande ce plat donc on crée la clé dans le dictionaire et on initialise sa valeur
-            self.plats[plat]=nb
+        if self.plats.get(plat) != None:
+            # si le client a deja commander ce plat, alors il est deja present dans le dictionnaire donc on ne fait qu'augmenter le nombre de commandes pour ce plat
+            self.plats[plat] += nb
+        else:
+            # c'est la premiere fois que le client commande ce plat donc on crée la clé dans le dictionaire et on initialise sa valeur
+            self.plats[plat] = nb
 
     def setNote(self, plat, note):
         # methode qui attribue la note 'note' au plat 'plat'
-       self.notes[plat]=note
-        
-        
+        self.notes[plat] = note
+
+
 # fin de la classe pour l'instant
 
 
@@ -43,14 +43,26 @@ class Restaurant:
 class Plat:
 
     def __init__(self):
-    # listes des champs
-        self.nom=''
+        # listes des champs
+        self.nom = ''
+        self.num = -1
         self.ingredients = []
         self.restaurants = []
+
+
 # fin constructeur
 # fin de la classe pour l'instant
 
+MATRICE_NOTE=[[]]
 
+def remplissage(client):
+    numClient=client.num
+    for plat, note in client.note.items():
+        numPlat=plat.num
+        MATRICE_NOTE[numClient][numPlat]=note
+    print('les notes du client numéro : '+ client.num + ' on bien été enregistrées')
+    return 
+    
 
 
 ##########################################################################
@@ -67,6 +79,14 @@ Luc= Client()
 Albert=Client()
 Noe= Client()
 Didi=Client()
+Dan.num=0
+Lionel.num=1
+Nicomas.num=2
+Ismael.num=3
+Luc.num=4
+Albert.num=5
+Noe.num=6
+Didi.num=7
 
 ##Creation des plats
 
@@ -86,11 +106,14 @@ burger=Plat()
 burger.nom='burger'
 frite=Plat()
 frite.nom='frite'
+brochette.num=0
+sushi.num=1
+pizza.num=2
+tacos.num=3
+salade_cesar.num=4
+salade_verte.num=5
+burger.num=6
+frite.num=7
 
 
-
-Dan.commander(sushi, 2)
-Lionel.commander(pizza, 3)
-Dan.commander(tacos, 3)
-Lionel.commander(tacos,1)
 

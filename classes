@@ -1,15 +1,19 @@
-TAB_CLIENTS=[]
+TAB_CLIENTS=[-1 for k in range(1000)]
+TAB_PLATS=[-1 for k in range(1000)]
+TAB_RESTAURANTS=[-1 for k in range(1000)]
+
 
 class Client:
 
     # constructeur
-    def __init__(self):
+    def __init__(self, nom , num):
         # liste des champs
-        self.num = 0
+        self.nom = nom
+        self.num = num
         self.restaurant = []
         self.plats = {}  # dictionnaire (plat, nb de fois où il a mangé ce plat)
         self.notes = {}  # dictionnaire (plat, note de ce palt)
-        TAB_CLIENTS.append(self)
+        TAB_CLIENTS[self.num]=self
 
     # fin constructeur
 
@@ -45,11 +49,13 @@ class Restaurant:
 
 class Plat:
 
-    def __init__(self):
+    def __init__(self, nom, num):
         # listes des champs
-        self.nom = ''
+        self.nom = nom
         self.ingredients = []
         self.restaurants = []
+        self.num=num
+        TAB_PLATS[self.num]=self
 
 
 # fin constructeur
@@ -75,50 +81,28 @@ def remplissage(client):
 
 ## creation des utilisateurs
 
-Dan = Client()
-Lionel = Client()
-Nicolas = Client()
-Ismael = Client()
-Luc = Client()
-Albert = Client()
-Noe = Client()
-Didi = Client()
+Dan = Client('Dan', 0)
+Lionel = Client('Lionel', 1)
+Nicolas = Client('Nicolas', 2)
+Ismael = Client('Ismael', 3)
+Luc = Client('Luc', 4)
+Albert = Client('Albert', 5)
+Noe = Client('Noe', 6)
+Didi = Client('Didi', 7)
 
-Dan.num = 0
-Lionel.num = 1
-Nicolas.num = 2
-Ismael.num = 3
-Luc.num = 4
-Albert.num = 5
-Noe.num = 6
-Didi.num = 7
 
 ##Creation des plats
 
-pizza = Plat()
-pizza.nom = 'pizza'
-sushi = Plat()
-sushi.nom = 'sushi'
-tacos = Plat()
-tacos.nom = 'tacos'
-brochette = Plat()
-brochette.nom = 'brochette'
-salade_cesar = Plat()
-salade_cesar.nom = 'salade_cesar'
-salade_verte = Plat()
-salade_verte.nom = 'salade_verte'
-burger = Plat()
-burger.nom = 'burger'
-frite = Plat()
-frite.nom = 'frite'
-brochette.num = 0
-sushi.num = 1
-pizza.num = 2
-tacos.num = 3
-salade_cesar.num = 4
-salade_verte.num = 5
-burger.num = 6
-frite.num = 7
+pizza = Plat('pizza',2)
+sushi = Plat('sushi',1)
+tacos = Plat('tacos',4)
+brochette = Plat('brochette',0)
+salade_cesar = Plat('salade_cesar',4)
+salade_verte = Plat('salade_verte',5)
+burger = Plat('burger',6)
+frite = Plat('frite',7)
+
+
 
 Dan.setNote(brochette, 1)
 Lionel.setNote(brochette, 4)

@@ -50,7 +50,16 @@ class Plat:
 # fin constructeur
 # fin de la classe pour l'instant
 
+MATRICE_NOTE = [[]]
 
+
+def remplissage(client):
+    numClient = client.num
+    for plat, note in client.note.items():
+        numPlat = plat.num
+        MATRICE_NOTE[numClient][numPlat] = note
+    print('les notes du client numéro : ' + client.num + ' on bien été enregistrées')
+    return
 
 
 ##########################################################################
@@ -67,6 +76,16 @@ Luc= Client()
 Albert=Client()
 Noe= Client()
 Didi=Client()
+
+Dan.num = 0
+Lionel.num = 1
+Nicomas.num = 2
+Ismael.num = 3
+Luc.num = 4
+Albert.num = 5
+Noe.num = 6
+Didi.num = 7
+
 
 ##Creation des plats
 
@@ -86,6 +105,14 @@ burger=Plat()
 burger.nom='burger'
 frite=Plat()
 frite.nom='frite'
+brochette.num = 0
+sushi.num = 1
+pizza.num = 2
+tacos.num = 3
+salade_cesar.num = 4
+salade_verte.num = 5
+burger.num = 6
+frite.num = 7
 
 
 Dan.setNote(brochette, 1)

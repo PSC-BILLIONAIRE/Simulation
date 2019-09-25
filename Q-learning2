@@ -1,0 +1,23 @@
+#produit Client supposé défini 
+#Segementation supposé effectuée 
+Class Etat :
+	#constructeur 
+	def __init__(self):
+        self.prix =[} #table de prix chaque 10 mins à cet état 
+		
+Class Action : 
+	def __init__(self):
+		self.Prix=[] #Prix	
+#On peut défir des actions de dimunition prix 
+
+def executer(action , etat ):
+    etat.prix = action.prix 
+  
+Class Politique : 
+    	
+	def __init__(self): 
+		self.TAction = [] #table de (Etat , Action ) 
+        
+        
+def recompense (etat): 
+    return ()

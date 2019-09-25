@@ -1,9 +1,11 @@
 #produit Client supposé défini 
 #Segementation supposé effectuée 
+gamma = 0 #
 Class Etat :
 	#constructeur 
 	def __init__(self):
-        self.prix =[} #table de prix chaque 10 mins à cet état 
+	self.heure #heure à 
+        self.prix =  #table de prix chaque 10 mins à cet état 
 		
 Class Action : 
 	def __init__(self):
@@ -18,6 +20,20 @@ Class Politique :
 	def __init__(self): 
 		self.TAction = [] #table de (Etat , Action ) 
         
-        
+def Proba(etat1 , etat2 , action): 
+	return 
+	
 def recompense (etat): 
     return (revenu - 1*reste_stock)
+    
+def utilité : 
+	return recompense(etat)
+	
+def utilite_espere(etat , action):
+	L = [Proba(etat1 , etat2 , action)*utilité(etat2) for etat2 in ETATS]
+	return sum(L)
+	
+def utilite_espere (etat): 	
+	L = [utilite_espere (etat , action) for action in ACTION]
+	return recompense(etat) + gamma*max(L)
+	

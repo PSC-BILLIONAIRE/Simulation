@@ -39,3 +39,7 @@ def utilite_espere (etat):
 	
 def Q(etat1 , etat2 , action): #Q qualité de l'arc
 	
+	try:
+		return (1-alpha)*Q(etat , action) + alpha * (récompense (etat , action) + gamma * max( Q( etat_suivant(etat)  , action))
+	except:
+		return ( action.Prix - Prix_defaut ) 

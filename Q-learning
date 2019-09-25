@@ -1,24 +1,25 @@
 #produit Client supposé défini 
 #Segementation supposé effectuée 
-#le but est de maximiser la fonction Q  
+#apprentissage de la fonction Q  (la fonction de valeure action-état)
+#le but est de maximiser 
 gamma = 0.5 # facteur d'actualisation entre 0 et 1
 alpha = 0.5 #facteur d'apprentissage entre 0 et 1
-Class Etat :
+class Etat :
 	#constructeur 
 	def __init__(self):
 		self.heure = 0 #heure en minutes
 		self.distance = 0 #distance en km 
 		self.temperature = 0 #température en dégré celcius
 		
-Class Action : 
+class Action : 
 	def __init__(self):
 		self.Prix=0#table de Prix chaque 10mins	
-Class Etat_Action : 
+class Etat_Action : 
 	def __init__(self):
 		self.etat = Etat 
 		self.action = Action 
 		
-Class Politique : 
+class Politique : 
 	
 	def __init__(self): 
 		self.TAction = [] #table de (Etat , Action ) 
@@ -40,3 +41,6 @@ def récompense(etat , action):
 def act_opt(etat): 
 	max = action0 
 	return (l'acton avec la plus grande Récompense(sur de long terme))
+
+
+#Execution 

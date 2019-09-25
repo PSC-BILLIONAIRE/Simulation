@@ -20,4 +20,4 @@ Class Politique :
         
         
 def recompense (etat): 
-    return ()
+    return (revenu - 1*reste_stock)

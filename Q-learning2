@@ -4,8 +4,8 @@ gamma = 0 #
 Class Etat :
 	#constructeur 
 	def __init__(self):
-	self.heure #heure à 
-        self.prix =  #table de prix chaque 10 mins à cet état 
+	self.heure =0 #heure à l'etat courant 
+        self.prix =0  #prix à l'état courant 
 		
 Class Action : 
 	def __init__(self):
@@ -36,4 +36,6 @@ def utilite_espere(etat , action):
 def utilite_espere (etat): 	
 	L = [utilite_espere (etat , action) for action in ACTION]
 	return recompense(etat) + gamma*max(L)
+	
+def Q(etat1 , etat2 , action): #Q qualité de l'arc
 	

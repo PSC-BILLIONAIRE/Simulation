@@ -1,19 +1,26 @@
 #produit Client supposé défini 
 #Segementation supposé effectuée 
-gamma = 0 #
+gamma = 0.5 #
+alpha = 0.5 
 Class Etat :
 	#constructeur 
 	def __init__(self):
-	self.heure =0 #heure à l'etat courant 
+		self.heure =0 #heure à l'etat courant 
         self.prix =0  #prix à l'état courant 
+        self.demande = 0 #la demande à l'etat courant 
+        self.stock = 0 #le stock à l'état courant 
 		
 Class Action : 
 	def __init__(self):
-		self.Prix=[] #Prix	
+		self.Prix= #Prix
+		self.heure = 10 #variation de l'heure	
 #On peut défir des actions de dimunition prix 
 
 def executer(action , etat ):
-    etat.prix = action.prix 
+	etat_result = Etat()
+    etat_result.prix = action.prix 
+    etat_result.heure += action.heure 
+    return etat_result
   
 Class Politique : 
     	
@@ -21,10 +28,12 @@ Class Politique :
 		self.TAction = [] #table de (Etat , Action ) 
         
 def Proba(etat1 , etat2 , action): 
-	return 
+	if (etat1.prix != etat2.prix)
+		return 0 
+	return (l esperance de la demande après une modification de prix de self.prix à self.heure)
 	
 def recompense (etat): 
-    return (revenu - 1*reste_stock)
+    return (etat.prix * etat.demande - etat.demande )
     
 def utilité : 
 	return recompense(etat)
@@ -37,9 +46,31 @@ def utilite_espere (etat):
 	L = [utilite_espere (etat , action) for action in ACTION]
 	return recompense(etat) + gamma*max(L)
 	
-def Q(etat1 , etat2 , action): #Q qualité de l'arc
+def Q(etat1 , action): #Q qualité de l'arc
 	
 	try:
-		return (1-alpha)*Q(etat , action) + alpha * (récompense (etat , action) + gamma * max( Q( etat_suivant(etat)  , action))
+		L = [ Q( etat_suivant(etat  , action) for action in ACTION ] 
+
+		return (1-alpha)*Q(etat , action) + alpha * (récompense (etat , action) + gamma * max( L) )
 	except:
-		return ( action.Prix - Prix_defaut ) 
+		return 0
+
+
+#executer
+import random as rd 
+nbre_tours = (60*24)/10
+for n in range(1 , nbre_tours): 
+	alpha = 1 
+	epsilon = 1 
+	etatinitial = Etat()
+	etatinitial.stock = stokin 
+	etatcourant = etatinitial 
+	for i in range(1 , nbre_tours):
+		etat = etatcourant 
+		nb = rd.random()
+		if (nb<epsilon):
+			a = randomAction(s) #choix aléatoire d'une action a partir de s 
+		else : 
+			a = (l action qui maximise Q (s , a))
+
+		etat_suivant = executer (a , s)

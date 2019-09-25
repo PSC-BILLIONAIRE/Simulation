@@ -1,41 +1,58 @@
 #produit Client supposé défini 
 #Segementation supposé effectuée 
 gamma = 0.5 #
-alpha = 0.5 
-Class Etat :
-	#constructeur 
-	def __init__(self):
-		self.heure =0 #heure à l'etat courant 
-        self.prix =0  #prix à l'état courant 
-        self.demande = 0 #la demande à l'etat courant 
-        self.stock = 0 #le stock à l'état courant 
-		
-Class Action : 
-	def __init__(self):
-		self.Prix= #Prix
-		self.heure = 10 #variation de l'heure	
-#On peut défir des actions de dimunition prix 
+alpha = 0.5
 
+  
+class Action : 
+	def __init__(self):
+		self.prix=0 #Prix
+		self.heure = 10 #variation de l'heure	
+	def __init__(self , prix):
+		self.prix = prix
+		self.heure = prix 
+#On peut définir des actions de dimunition prix 
+
+action = Action(10)
+
+class Etat :
+	#constructeur
+    def __init__(self):
+        self.heure = 0
+        self.prix = 0
+        self.demande = 0
+        self.stock = 0
+        self.TabAction = [action]
+        
+class etat_action:
+	def __init__(self):
+		self.etat = Etat()
+		self.action = Action()
+	def __init__(self , etat , action) :
+		self.etat = etat 
+		self.action = action 
 def executer(action , etat ):
-	etat_result = Etat()
+    etat_result = Etat()
     etat_result.prix = action.prix 
     etat_result.heure += action.heure 
+    etat_result.demande = int (input ("demande en cours: "))
+    etat_result.stock -= etat.demande 
     return etat_result
   
-Class Politique : 
+class Politique : 
     	
 	def __init__(self): 
 		self.TAction = [] #table de (Etat , Action ) 
         
 def Proba(etat1 , etat2 , action): 
-	if (etat1.prix != etat2.prix)
+	if (etat2.prix != action.prix):
 		return 0 
-	return (l esperance de la demande après une modification de prix de self.prix à self.heure)
+	return 1/2 #(probabilité que la demande de etat_2 soit egale a celle de etat après action a etat_1)
 	
 def recompense (etat): 
     return (etat.prix * etat.demande - etat.demande )
     
-def utilité : 
+def utilité(etat) : 
 	return recompense(etat)
 	
 def utilite_espere(etat , action):
@@ -46,31 +63,55 @@ def utilite_espere (etat):
 	L = [utilite_espere (etat , action) for action in ACTION]
 	return recompense(etat) + gamma*max(L)
 	
-def Q(etat1 , action): #Q qualité de l'arc
-	
-	try:
-		L = [ Q( etat_suivant(etat  , action) for action in ACTION ] 
+def Q(etat , action): #Q qualité de l'arc
+		try:
+			return QQ[ (etat , action) ]
+		except:
+			return 0
+def maxQ(etat):
+    result = Q(etat , etat.TabAction[0])        
+    n = len (etat.TabAction)
+    for i in range(1 ,n) :
+        if (result   < Q(etat , etat.TabAction[i]) ):
+            result = Q(etat , etat.TabAction[i])
+    return result
 
-		return (1-alpha)*Q(etat , action) + alpha * (récompense (etat , action) + gamma * max( L) )
-	except:
-		return 0
+def argmaxQ(etat):
+    result = etat.TabAction[0]        
+    n = len (etat.TabAction)
+    for i in range(1 ,n) :
+        if (Q(etat ,result )  < Q(etat , TabAction[i]) ):
+            result = etat.TabAction[i]
+    return result
 
-
-#executer
+def randomAction(etat):
+    n = len (etat.TabAction)
+    i = int (rd.random()*(n-1))
+    return etat.TabAction[i]
+QQ = {}
 import random as rd 
-nbre_tours = (60*24)/10
+etatinitial = Etat()
+etatinitial.stock = 20
+
+nbre_tours =5 #int ((60*24)/10)
 for n in range(1 , nbre_tours): 
 	alpha = 1 
-	epsilon = 1 
-	etatinitial = Etat()
-	etatinitial.stock = stokin 
+	epsilon = 1  
 	etatcourant = etatinitial 
 	for i in range(1 , nbre_tours):
 		etat = etatcourant 
 		nb = rd.random()
 		if (nb<epsilon):
-			a = randomAction(s) #choix aléatoire d'une action a partir de s 
+			action = randomAction(etat) #choix aléatoire d'une action a partir de s 
 		else : 
-			a = (l action qui maximise Q (s , a))
+			action = (argmaxQ (etat))
 
-		etat_suivant = executer (a , s)
+		etat_suivant = executer (action , etat)
+		
+		
+		QQ[ (etat ,action) ] = alpha * (recompense(etat) + gamma * (maxQ( etat_suivant)) + (1 - alpha)*Q(etat ,action))
+		alpha *= 0.99
+		epsilon *= 0.99
+		if (etat_suivant.stock == 0 or etat_suivant.heure == 60 * 24):
+			break
+	    

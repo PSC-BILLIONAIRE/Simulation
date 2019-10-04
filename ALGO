@@ -227,13 +227,14 @@ import pydot
 
 
 
+#dataset.head()
 
 dataset.user_id = dataset.user_id.astype('category').cat.codes.values
 dataset.item_id = dataset.item_id.astype('category').cat.codes.values
 #import scikitlearn as sklearn
 
 from sklearn.model_selection import train_test_split
-train, test = train_test_split(dataset, test_size=0.25)
+train, test = train_test_split(dataset, shuffle=False, test_size=0.25)
 
 import keras
 from IPython.display import SVG
@@ -251,8 +252,8 @@ from keras.constraints import non_neg
 
 
 
-n_latent_factors_user = 5
-n_latent_factors_movie = 8
+n_latent_factors_user = 18
+n_latent_factors_movie = 22
 
 
 
@@ -283,7 +284,7 @@ adam = Adam(lr=0.005)
 model = keras.Model([user_input, movie_input], result)
 model.compile(optimizer=adam,loss= 'mean_absolute_error')
 
-history = model.fit([train.user_id, train.item_id], train.rating, epochs=100, verbose=2)
+history = model.fit([train.user_id, train.item_id], train.rating, epochs=300, verbose=1)
 
 prediction = model.predict([test.user_id, test.item_id])
 

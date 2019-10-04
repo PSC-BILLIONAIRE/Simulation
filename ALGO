@@ -225,9 +225,8 @@ import matplotlib.pyplot as plt
 import warnings
 import pydot
 
-dataset = pd.read_csv("C:\\Users\danbe\Downloads\ml-100k\\u.data",sep='\t',names="user_id,item_id,rating,timestamp".split(","))
 
-#dataset.head()
+
 
 dataset.user_id = dataset.user_id.astype('category').cat.codes.values
 dataset.item_id = dataset.item_id.astype('category').cat.codes.values

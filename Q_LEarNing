@@ -1,0 +1,181 @@
+import pandas as pd 
+default_price = 10
+class State: 
+	
+	def __init__(self , heure = 0 , stock = 0):
+		self.time = heure 
+		self.stock = stock 
+		self.Table_states = []
+
+	def Print(self):
+		result = "State : \ntime <--  " + str(self.time) + "\nstock <--  " + str(self.stock)
+		return result 
+	def SPrint(self):
+		result = "("+str(self.time) + " , " +str(self.stock) +")"
+		return result 
+	def Compare(self , other_state): 
+		return (self.time == other_state.time and self.stock == other_state.stock)
+
+	def PRINT(self):
+		print(self.Print())
+		n = len(self.Table_states)
+		print(n)
+		for i in range(n):
+			print(self.Table_states[i].Print())
+
+
+	def SPRINT(self):
+		print(self.SPrint())
+		n = len(self.Table_states)
+		print(n)
+		for i in range(n):
+			print(self.Table_states[i].SPrint())
+
+class Action : 
+	
+	def __init__(self , price = default_price):
+		self.price = price 
+
+	def Print(self):
+		result = "Action :\nprice <-- " + str(self.price)
+		return result 
+	def SPrint(self):
+		result = "("+ str(self.price) +")"
+		return result 
+
+	def Compare(self , other_action): 
+		return self.price == other_action.price
+
+def recompense (state1 , action , state2):
+	result = (state1.stock - state1.stock)*action.price - state2.stock/20  
+	return result 
+
+def proba(state1 , action ,state2):
+	if not(state2 in state1.Table_states):
+		return 0 
+	n = len(state1.Table_states)
+	return 1/n 
+#Test
+def actualize():
+	for state in Table_states:
+		for state2 in Table_states:
+			if (state2.time == state.time + 1 and state2.stock <= state.stock):
+				if (not(state2 in state.Table_states)):
+					state.Table_states.append(state2)
+					print("Nouvel ajout :\n" + state2.SPrint() + "\n" + "à\n" + state.SPrint() + "\n")
+
+def All_print():
+	print(Table_states[0].SPrint())
+	for i in range(1 , len(Table_states)):
+		if ( Table_states[i].time != Table_states[i-1].time ):
+			print("\n")
+		print(Table_states[i].SPrint() , end = "")
+
+def Create_states_txt(FileName , sep):
+	l = pd.read_csv(FileName , sep = sep)
+	n = len(l)
+	for cpt in range(n):
+		Table_states.append( State(l["time"][cpt] , l["stock"][cpt]))
+		print("New state created .....")
+		print(Table_states[cpt].SPrint()+ "\n")
+	
+def Create_actions_txt(FileName , sep):
+	l = pd.read_csv(FileName , sep = sep)
+	n = len(l)
+	for cpt in range(n):
+		Table_actions.append( State(l["price"][cpt] ))
+		print("New actions created .....")
+		print(Table_actions[cpt].SPrint()+ "\n")
+
+
+def Test1():
+	
+	One = State(1 , 20)
+	Two = State(2 , 10)
+	Three = State(1 , 10)
+	Four = State(1 , 20)
+	Aone = Action()
+	Atwo = Action(20)
+	
+	One.Print()
+	Two.Print()
+	print(One.Compare(Three))
+	print(One.Compare(Four))
+	print(Aone.Print())
+	print(Atwo.Print())
+	print(recompense(One , Aone , Two))
+
+
+
+def Test2():
+	#créaction des actions de k prix avec un pas de \frac{(pmax - pmin)}{k - 1}
+	
+	k = 3  
+	pmax = 20 
+	pmin = 10 
+	pas = (pmax - pmin)/(k - 1)
+	for i in range(k):
+		Table_actions.append (Action(pmin + i*pas))
+		print("New action created ......")
+		print(Table_actions[i].SPrint() + "\n")
+
+	
+
+def Test3():
+	#states created by one hour step and for all hour , 20 states because of the stock 
+	 
+	
+	cpt = 0 
+	Table_states.append(State(1 , 2))
+	for i in range(1 , 3):
+		for j in range(3):
+			Table_states.append(State((i+1) ,j))
+			print("New state created .....")
+			print(Table_states[cpt].SPrint()+ "\n")
+			cpt+=1 
+	
+
+
+def Test4():
+	import random as rd 
+	for i in range(10):
+		action = rd.choice(Table_actions)
+		state1 = rd.choice(Table_states)
+		state2 = rd.choice(Table_states)
+		print(state1.SPrint() + action.SPrint()+state2.SPrint())
+		print("recompense = ", recompense(state1 , action , state2))
+		print("proba = " , proba(state1 , action , state2))
+
+def Test5():
+	for i in Table_states:
+		i.SPRINT()
+		print("\n")
+
+def Create_prob():
+	f = open("proba.txt" , "w")
+	for state in Table_states:
+			f.write(state.SPrint()+";")
+	f.write("\n")
+	for i in range(len(Table_states)):
+		for state in Table_states:
+			n = len(state.Table_states)
+			if (i<n):
+				f.write(str(1/n)+";")
+			else : 
+				f.write(str(0) + ";")
+		f.write("\n")
+	f.close()
+Table_actions = []
+Table_states = [] 
+#Test1()
+#Test2()
+#Test3()
+
+Create_states_txt("states.txt" , ",")
+Create_actions_txt("actions.txt" , ",2")
+
+Create_prob()
+actualize()
+Test5()
+#Test4()
+#All_print()

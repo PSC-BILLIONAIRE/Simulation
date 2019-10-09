@@ -1,14 +1,33 @@
 #produit Client supposé défini 
-#Segementation supposée effectuée 
+#Segementation supposé effectuée 
+import pandas as pd
 import numpy as np  
+import scipy.stats as stats
+def_Filename = "data.csv"
+
+def regression(Filename = def_Filename):
+	L = pd.read_csv(Filename, sep=";")
+#Suppression de ligne contenant la valeur 'NA'
+	L = L.dropna()
+# Nos arrays
+	Y = np.array(L["demand"])
+	Z_transp = np.array([L["time"] , L["price"]])
+	Z = np.transpose(Z_transp)
+	Z_diese = np.dot(Z_transp , Z)
+	Z_diese = np.dot(np.linalg.inv(Z_diese), Z_transp )
+	n=len(L)
+	beta = np.dot(Z_diese , Y) 
+	beta_t = beta[0]
+	beta_p = beta[1]
+	sigma2 = (1/(n-p)) * np.linalg.norm(temp)**2 
+	return  (beta_t , beta_p , sigma2)
+
 class Action : 
 	#constructeur
 
 	def __init__(self , prix):
 		self.prix = prix
 
-
-#On peut définir des actions de dimunition prix 
 class Etat :
 	#constructeur
     def __init__(self ,time , stock ):
@@ -16,25 +35,41 @@ class Etat :
         self.stock = 0
 
 
-
+#une demande decroissante linéaire du prix et de la période 
+"""
+On se dit que plus il fait tard plus la demande est faible 
+"""
+"""
+les parametres beta_t et beta_p sont à estimer à partir des données précédentes 
+NB:regression linéaire 
+"""
 def Demand(time , price):
+	try : 
+		return beta_t * time_quant + beta_p + price 
+	except : 
+		return Stock_beg/Nb_states - 1
 	
-	return beta_t * time_quant + beta_p + price 
-
-#alet Demand centrée en demand plus haut 
+#alea Demand loc in demand above
 
 def Prob(eta1 , action , etat2):
 			if(etat2.time != etat1.time+1 or etat1.stock < etat2.stock ) :
 				return 0
 			Demand = Demand(etat1.time , action.prix)
+			demand_here = etat1.stock - etat2.stock
+			#return proba que Demand = etat1.stock - etat2.stock via le prix 
+			return stats.norm.pdf( demand_here , loc = Demand , scale = sigma2 )
 			#coder une densité ayant son maximum en Demand 
 			#retourner la probabilité 
-			return 1/3
+			#return 1/3
 
-def Esp(etat , tab_V , action):
+def reward(state1 , action ,state2):
+
+	return theta1 * acton.price*(state1.stock - state2.stock) - theta2
+
+def Esp(state , tab_V , action):
 	i = etat.time
 	P = np.array([ prob(etat , State(i + 1 , j) , action) for j in range(Stock_beg) ])
-	V_r = np.array([ tab_V[i+1][j] + reward(State(j), action , ) for j in range(Stock_beg) ])
+	V_r = np.array([ tab_V[i+1][j] + reward(state , State(j), action ) for j in range(Stock_beg) ])
 	return sum(np.dot(P , np.transpose(V_r)))
 
 def argmax(f ,etat, tab_V , ensemble):
@@ -46,6 +81,7 @@ def argmax(f ,etat, tab_V , ensemble):
 
 def ChooseAction(etat , tab_V):
 	return argmax(Esp , etat , tab_V , Table_actions)
+
 
 
 def main():
@@ -80,4 +116,6 @@ def Print_tabAc(Table_actions):
 	for i in Table_actions:
 		print(i.prix , " -- ",end="")
 	print()
+	
 main()
+

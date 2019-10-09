@@ -48,7 +48,6 @@ def ChooseAction(etat , tab_V):
 	return argmax(Esp , etat , tab_V , Table_actions)
 
 
-
 def main():
 	theta1 = 1/2
 	theta2 = 1/2
@@ -61,7 +60,8 @@ def main():
 	k = 10 
 	pas = (pmax - pmin)/(k - 1)
 	for i in range(k):
-		Table_actions = np.append (Table_actions , Action(pmin + i*pas))
+		Table_actions.append(Action(pmin + i*pas))
+	Table_actions = np.array (Table_actions )
 	#creation etats de 20h à 23h50 par pas de 10
 	
 	tab_V = np.array([])
@@ -69,29 +69,15 @@ def main():
 	tab_d = tab0
 	tab_d.append(0)
 	tab0.append(1)
-	tab_V = np.append(tab_V , tab0)
-	i = 1 
-	while(i<Nb_states):
-		tab_V.append(0); 
-		i+=1
+	tab_V = np.zeros((Nb_states ,Stock_beg ))
+	tab_V[0][Stock_beg - 1] = 1
+	Print_tabAc(Table_actions)
+	print(tab_V)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def Print_tabAc(Table_actions):
+	print("-- " , end="")
+	for i in Table_actions:
+		print(i.prix , " -- ",end="")
+	print()
+main()

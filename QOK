@@ -1,5 +1,5 @@
 #produit Client supposé défini 
-#Segementation supposé effectuée 
+#Segementation supposée effectuée 
 import numpy as np  
 class Action : 
 	#constructeur
@@ -31,11 +31,37 @@ def Prob(eta1 , action , etat2):
 			#retourner la probabilité 
 			return 1/3
 
+def Esp(etat , tab_V , action):
+	i = etat.time
+	P = np.array([ prob(etat , State(i + 1 , j) , action) for j in range(Stock_beg) ])
+	V_r = np.array([ tab_V[i+1][j] + reward(State(j), action , ) for j in range(Stock_beg) ])
+	return sum(np.dot(P , np.transpose(V_r)))
 
-Nb_states = 24
-Stock_beg = 100
+def argmax(f ,etat, tab_V , ensemble):
+	result=ensemble[0] 
+	for i in ensemble : 
+		if (f(etat , tab_V , result)<f(etat , tab_V , i)):
+			result = i
+	return result 
+
+def ChooseAction(etat , tab_V):
+	return argmax(Esp , etat , tab_V , Table_actions)
+
+
+
 def main():
+	Nb_states = 24
+	Stock_beg = 100
+	pmax = 20 
+	pmin = 10
+	Table_actions =[]
+	#Creation action par pas de k
+	k = 10 
+	pas = (pmax - pmin)/(k - 1)
+	for i in range(k):
+		Table_actions = np.append (Table_actions , Action(pmin + i*pas))
 	#creation etats de 20h à 23h50 par pas de 10
+	
 	tab_V = np.array([])
 	tab0 = [0 for i in range(Stock_beg - 1)]
 	tab0.append(1)
@@ -46,11 +72,23 @@ def main():
 		i+=1
 
 
-def Esp(etat , tab_V , action):
-	i = etat.time
-	P = np.array([ prob(etat , State(i + 1 , j) , action) for j in range(Stock_beg) ])
-	V_r = np.array([ tab_V[i+1][j] + reward(State(j), action , ) for j in range(Stock_beg) ])
-	return 
 
-def ChooseAction(etat , tab_V):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

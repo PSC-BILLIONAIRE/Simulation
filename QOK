@@ -1,0 +1,56 @@
+#produit Client supposé défini 
+#Segementation supposé effectuée 
+import numpy as np  
+class Action : 
+	#constructeur
+
+	def __init__(self , prix):
+		self.prix = prix
+
+
+#On peut définir des actions de dimunition prix 
+class Etat :
+	#constructeur
+    def __init__(self ,time , stock ):
+        self.time = 0
+        self.stock = 0
+
+
+
+def Demand(time , price):
+	
+	return beta_t * time_quant + beta_p + price 
+
+#alet Demand centrée en demand plus haut 
+
+def Prob(eta1 , action , etat2):
+			if(etat2.time != etat1.time+1 or etat1.stock < etat2.stock ) :
+				return 0
+			Demand = Demand(etat1.time , action.prix)
+			#coder une densité ayant son maximum en Demand 
+			#retourner la probabilité 
+			return 1/3
+
+
+Nb_states = 24
+Stock_beg = 100
+def main():
+	#creation etats de 20h à 23h50 par pas de 10
+	tab_V = np.array([])
+	tab0 = [0 for i in range(Stock_beg - 1)]
+	tab0.append(1)
+	tab_V = np.append(tab_V , tab0)
+	i = 1 
+	while(i<Nb_states):
+		tab_states.append(i); 
+		i+=1
+
+
+def Esp(etat , tab_V , action):
+	i = etat.time
+	P = np.array([ prob(etat , State(i + 1 , j) , action) for j in range(Stock_beg) ])
+	V_r = np.array([ tab_V[i+1][j] + reward(State(j), action , ) for j in range(Stock_beg) ])
+	return 
+
+def ChooseAction(etat , tab_V):
+

@@ -122,7 +122,7 @@ user = input("numero de l'utilisateur : ")
 item = input("numero de l'item : ")
 
 res=model.predict([np.array([user]),np.array([item])])
-print("La note associée à l'utilisateur numéro", user, "pour le plat numéro", item , "est de", round(float(res[0]), 2)+"." )
+print("La note associée à l'utilisateur numéro", user, "pour le plat numéro", item , "est de", round(float(res[0]), 2) )
 
 print("Nous allons verifier la cohérance de l'algorithme en regardant les informations de l'utilisateur numéro" , user)
 print("Nous disposons des notes suivantes pour l'utilsateur", user)

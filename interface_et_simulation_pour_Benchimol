@@ -1,0 +1,134 @@
+import random as rd
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import warnings
+import pydot
+import keras
+from IPython.display import SVG
+from keras.optimizers import Adam
+from keras.utils.vis_utils import model_to_dot
+from keras.constraints import non_neg
+
+MATRICE_NOTE = []
+MATRICE_NOTE_LAC = []
+
+
+for j in range(50):
+    L=[5 for k in range(75)]+ [1 for k in range(75)]
+    M=[1 for k in range(75)]+[5 for k in range(75)]
+    L_lac=[]
+    M_lac=[]
+    for k in range(75):
+        a=rd.random()
+        if a<.5 :
+            L_lac.append(None)
+            M_lac.append(1)
+        else:
+            L_lac.append(5)
+            M_lac.append(None)
+    for k in range(75):
+        a=rd.random()
+        if a<.5 :
+            M_lac.append(None)
+            L_lac.append(1)
+        else:
+            M_lac.append(5)
+            L_lac.append(None)
+    MATRICE_NOTE.append(L)
+    MATRICE_NOTE.append(M)
+    MATRICE_NOTE_LAC.append(L_lac)
+    MATRICE_NOTE_LAC.append(M_lac)
+
+
+
+##Construction de la matrice utile au dataframe à partir de la matrice de note
+## Je prend ici la matrice lacunaire
+utile = []
+lignes=len(MATRICE_NOTE)
+colonnes=len(MATRICE_NOTE[1])
+for i in range(lignes):
+    for j in range(colonnes):
+        if MATRICE_NOTE_LAC[i][j]!=None:
+            utile.append([i, j, MATRICE_NOTE_LAC[i][j]])
+utile=np.array(utile)
+
+
+dataset=pd.DataFrame(utile, columns=['user_id', 'item_id', 'rating'])
+
+
+
+
+## ALGO DE RECOMMEND
+
+
+dataset.user_id = dataset.user_id.astype('category').cat.codes.values
+dataset.item_id = dataset.item_id.astype('category').cat.codes.values
+
+from sklearn.model_selection import train_test_split
+train, test = train_test_split(dataset, test_size=0.20)
+
+n_users, n_plats = len(dataset.user_id.unique()), len(dataset.item_id.unique())
+n_latent_factors = 15
+n_latent_factors_user =5
+n_latent_factors_plat = 5
+
+
+plat_input = keras.layers.Input(shape=[1],name='Item')
+plat_embedding = keras.layers.Embedding(n_plats + 1, n_latent_factors_plat, name='Plat-Embedding')(plat_input)
+plat_vec = keras.layers.Flatten(name='FlattenPlats')(plat_embedding)
+plat_vec = keras.layers.Dropout(0.2)(plat_vec)
+
+user_input = keras.layers.Input(shape=[1],name='User')
+user_embedding = keras.layers.Embedding(n_users + 1, n_latent_factors_user,name='User-Embedding')(user_input)
+user_vec = keras.layers.Flatten(name='FlattenUsers')(user_embedding)
+
+
+concat = keras.layers.dot([plat_vec, user_vec], axes=1, normalize=False)
+concat_dropout = keras.layers.Dropout(0.2)(concat)
+
+dense = keras.layers.Dense(200,name='FullyConnected')(concat)
+
+result = keras.layers.Dense(1, activation='relu',name='Activation')(dense)
+
+adam = Adam(lr=0.01)
+
+model = keras.Model([user_input, plat_input], result)
+model.compile(optimizer=adam, loss= 'mean_squared_error')
+
+history = model.fit([train.user_id, train.item_id], train.rating, epochs=50, verbose=0)
+
+#y_test = model.predict([test.user_id, test.item_id])
+y_data = model.predict([dataset.user_id, dataset.item_id])
+
+
+#pd.Series(history.history['loss']).plot(logy=True)
+#plt.xlabel("Epoch")
+#plt.ylabel("Train Error")
+
+y_hat = np.round(model.predict([test.user_id, test.item_id]),0)
+y_true = test.rating
+
+from sklearn.metrics import mean_absolute_error
+mean_absolute_error(y_true, y_hat)
+
+
+#############################################################
+######                      INTERFACE                  ######
+#############################################################
+
+
+user = input("numero de l'utilisateur : ")
+item = input("numero de l'item : ")
+
+res=model.predict([np.array([user]),np.array([item])])
+print("La note associée à l'utilisateur numéro " + str(user) + " pour le plat numéro " + str(item) + " est de "+ str(round(float(res[0]), 2))+"." )
+
+print("Nous allons verifier la cohérance de l'algorithme en regardant les informations de l'utilisateur numéro " , user)
+print("Nous disposons des notes suivantes pour l'utilsateur ", user)
+df=dataset[dataset['user_id']==user]
+print(df)
+
+
+
+

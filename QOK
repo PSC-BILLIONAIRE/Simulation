@@ -1,121 +1,98 @@
-#produit Client supposé défini 
-#Segementation supposé effectuée 
-import pandas as pd
-import numpy as np  
+
+
+
+# produit Client supposé défini
+# Segementation supposée effectuée
+import numpy as np
 import scipy.stats as stats
-def_Filename = "data.csv"
-
-def regression(Filename = def_Filename):
-	L = pd.read_csv(Filename, sep=";")
-#Suppression de ligne contenant la valeur 'NA'
-	L = L.dropna()
-# Nos arrays
-	Y = np.array(L["demand"])
-	Z_transp = np.array([L["time"] , L["price"]])
-	Z = np.transpose(Z_transp)
-	Z_diese = np.dot(Z_transp , Z)
-	Z_diese = np.dot(np.linalg.inv(Z_diese), Z_transp )
-	n=len(L)
-	beta = np.dot(Z_diese , Y) 
-	beta_t = beta[0]
-	beta_p = beta[1]
-	sigma2 = (1/(n-p)) * np.linalg.norm(temp)**2 
-	return  (beta_t , beta_p , sigma2)
-
-class Action : 
-	#constructeur
-
-	def __init__(self , prix):
-		self.prix = prix
-
-class Etat :
-	#constructeur
-    def __init__(self ,time , stock ):
-        self.time = 0
-        self.stock = 0
+import math
+Nb_States = 24
+Stock_beg = 40
+def Demand(time, price):
+    return Stock_beg*math.exp(-price/20)*math.exp(-(time-12)**2/24)
 
 
-#une demande decroissante linéaire du prix et de la période 
-"""
-On se dit que plus il fait tard plus la demande est faible 
-"""
-"""
-les parametres beta_t et beta_p sont à estimer à partir des données précédentes 
-NB:regression linéaire 
-"""
-def Demand(time , price):
-	try : 
-		return beta_t * time_quant + beta_p + price 
-	except : 
-		return Stock_beg/Nb_states - 1
-	
-#alea Demand loc in demand above
+# alet Demand centrée en demand plus haut
 
-def Prob(eta1 , action , etat2):
-			if(etat2.time != etat1.time+1 or etat1.stock < etat2.stock ) :
-				return 0
-			Demand = Demand(etat1.time , action.prix)
-			demand_here = etat1.stock - etat2.stock
-			#return proba que Demand = etat1.stock - etat2.stock via le prix 
-			return stats.norm.pdf( demand_here , loc = Demand , scale = sigma2 )
-			#coder une densité ayant son maximum en Demand 
-			#retourner la probabilité 
-			#return 1/3
+def Prob(i,j, prix, k,l):
+    var_demande = 5
+    if (k != i + 1 or j< l):
+        return 0
+    if j == 0:
+        return 0
+    demande = Demand(i, prix)
+    proba =  stats.norm.cdf(j-l,demande, var_demande) - stats.norm.cdf(j-(l+1),demande, var_demande)
+    return proba
+    # coder une densité ayant son maximum en Demand
+    # retourner la probabilité
 
-def reward(state1 , action ,state2):
 
-	return theta1 * acton.price*(state1.stock - state2.stock) - theta2
+def reward(i,j,prix,k,l):
+    return prix*(j-l)
 
-def Esp(state , tab_V , action):
-	i = etat.time
-	P = np.array([ prob(etat , State(i + 1 , j) , action) for j in range(Stock_beg) ])
-	V_r = np.array([ tab_V[i+1][j] + reward(state , State(j), action ) for j in range(Stock_beg) ])
-	return sum(np.dot(P , np.transpose(V_r)))
+def Esp(i,j, tab_V, prix, dic_prob, dic_rew):
 
-def argmax(f ,etat, tab_V , ensemble):
-	result=ensemble[0] 
-	for i in ensemble : 
-		if (f(etat , tab_V , result)<f(etat , tab_V , i)):
-			result = i
-	return result 
+    P = dic_prob[(i,j,prix)]
+    V_r = tab_V[i + 1] + dic_rew[(i,j, prix)]
+    return np.dot(P, V_r)
 
-def ChooseAction(etat , tab_V):
-	return argmax(Esp , etat , tab_V , Table_actions)
+
+def ChooseAction(i,j, tab_V, liste_Prix, dic_prob, dic_rew):
+    maximum = -np.inf
+    argmax = 0
+    for price in liste_Prix:
+        esp = Esp(i,j,tab_V,price, dic_prob, dic_rew)
+        if esp>maximum:
+            maximum = esp
+            argmax = price
+    return maximum,argmax
+
+
+def update_MDP(tab_V, liste_Prix, dic_prob, dic_rew):
+    tab_int = np.zeros((Nb_States,Stock_beg))
+
+
+    for i in range(Stock_beg):
+        tab_int[Nb_States-1][i] = 0
+
+    for i in range(Nb_States-2,0,-1):
+        for j in range(Stock_beg):
+            Vmax, prix = ChooseAction(i,j,tab_V,liste_Prix,dic_prob,dic_rew)
+            tab_int[i][j] = Vmax
+
+    return tab_int
 
 
 
 def main():
-	theta1 = 1/2
-	theta2 = 1/2
-	Nb_states = 24
-	Stock_beg = 100
-	pmax = 20 
-	pmin = 10
-	Table_actions =[]
-	#Creation action par pas de k
-	k = 10 
-	pas = (pmax - pmin)/(k - 1)
-	for i in range(k):
-		Table_actions.append(Action(pmin + i*pas))
-	Table_actions = np.array (Table_actions )
-	#creation etats de 20h à 23h50 par pas de 10
-	
-	tab_V = np.array([])
-	tab0 = [0 for i in range(Stock_beg - 1)]
-	tab_d = tab0
-	tab_d.append(0)
-	tab0.append(1)
-	tab_V = np.zeros((Nb_states ,Stock_beg ))
-	tab_V[0][Stock_beg - 1] = 1
-	Print_tabAc(Table_actions)
-	print(tab_V)
 
+    pmax = 20
+    pmin = 10
+    liste_Prix = []
+    # Creation action par pas de k
+    k = 10
+    pas = (pmax - pmin) / (k - 1)
+    for i in range(k):
+        liste_Prix = np.append(liste_Prix, (pmin + i * pas))
+    # creation etats de 20h à 23h50 par pas de 10
 
-def Print_tabAc(Table_actions):
-	print("-- " , end="")
-	for i in Table_actions:
-		print(i.prix , " -- ",end="")
-	print()
-	
-main()
+    tab_V = np.random.rand(Nb_States, Stock_beg)*0.10
+    dic_rew = {}
+    for i in range(Nb_States - 1):
+        for j in range(Stock_beg):
+            for price in liste_Prix:
+                dic_rew[(i, j, price)] = np.array([reward(i, j, price, i + 1, m) for m in range(Stock_beg)])
+    dic_prob = {}
+    for i in range(Nb_States-1):
+        for j in range(Stock_beg):
+            for price in liste_Prix:
 
+                dic_prob[(i,j,price)] = np.array([Prob(i, j, price, i + 1, m) for m in range(Stock_beg)])
+
+    print("Precalcul fini")
+    tab_V = update_MDP(tab_V, liste_Prix, dic_prob, dic_rew)
+    print(tab_V)
+
+if __name__ == "__main__":
+    # execute only if run as a script
+    main()

@@ -24,6 +24,7 @@ df = pd.DataFrame()
 df["Propension à payer"] = []
 df["Note"] = []
 df["Class"] = []
+df["Periode"] = []
 print(df)
 tout = 0 
 for i in range(1, jr + 1):
@@ -54,8 +55,8 @@ for i in range(1, jr + 1):
             nn, nb = npr.multinomial(nbre_temp, [prop_non, prop_bien])   
             Note= Note + list(npr.randint(1 , 4 , nn))
             Note = Note + (list(npr.randint(3, 6 , nb)))
-            
-        Dic = {"Propension à payer":table_pay , "Note" : Note , "Class" : Class}
+        Periode = [t for i in range(n)]    
+        Dic = {"Propension à payer":table_pay , "Note" : Note , "Class" : Class , "Periode" : Periode}
         dg = pd.DataFrame(Dic)
         df = pd.concat([df ,dg])
 print(tout == len(df))
